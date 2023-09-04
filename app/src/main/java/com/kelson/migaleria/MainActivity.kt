@@ -7,7 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -61,16 +63,16 @@ fun Login(modifier: Modifier = Modifier) {
     Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Row {
             Text(
-                text = "INICIA SESIÓN :D",
-                modifier = modifier, color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold
+                text = "🦆 INICIA SESIÓN 🦆",
+                modifier = modifier.padding(vertical = 50.dp), color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold
             )
         }
-
-        var username : String
-        username = CampoInput(titulo = "user", 10, "Text").text
-        var password : String
-        password = CampoInput(titulo = "password", 8, "Password").text
-        BotonIngreso(txt = "Sumbmit", username, password)
+        Spacer(modifier = Modifier.height(20.dp))
+        val username = campoInput(titulo = "user", 10, "Text").text
+        Spacer(modifier = Modifier.height(40.dp))
+        val password = campoInput(titulo = "password", 8, "Password").text
+        Spacer(modifier = Modifier.height(40.dp))
+        BotonIngreso(txt = "Ingresar", username, password)
 
     }
 
@@ -78,7 +80,7 @@ fun Login(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CampoInput(titulo:String, max:Int, passwordType:String) : TextFieldValue {
+fun campoInput(titulo:String, max:Int, passwordType:String) : TextFieldValue {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     Text(text = "Ingresa tu $titulo", modifier = Modifier.padding(vertical = 5.dp))
     Row (modifier = Modifier.padding(vertical = 30.dp)) {
@@ -115,8 +117,8 @@ fun CampoInput(titulo:String, max:Int, passwordType:String) : TextFieldValue {
 
 @Composable
 fun BotonIngreso(txt:String, username:String, password:String){
-    var userval = stringResource(id =R.string.user)
-    var passval = stringResource(id =R.string.password)
+    val userval = stringResource(id =R.string.user)
+    val passval = stringResource(id =R.string.password)
     Row {
         val mContext = LocalContext.current
         Button( colors = ButtonDefaults.buttonColors(
@@ -128,12 +130,11 @@ fun BotonIngreso(txt:String, username:String, password:String){
                         mContext.startActivity(Intent(mContext, Activity1::class.java))
                     }else{
                         Toast.makeText(mContext, "Datos incorrectos, el usuario es: ${userval}, y la contraseña es: ${passval}", Toast.LENGTH_SHORT).show()
-                        mContext.startActivity(Intent(mContext, Activity1::class.java))
                     }
 
         }
         ) {
-            Text("Ingresar", color = Color.White)
+            Text(txt, color = Color.White)
         }
     }
 }

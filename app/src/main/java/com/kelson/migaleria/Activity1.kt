@@ -1,6 +1,7 @@
 package com.kelson.migaleria
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,17 +55,19 @@ class Activity1 : ComponentActivity() {
 
 @Composable
 fun CuerpoGallery() {
-
-    data class patos(val imageID: Int, val imageTile: String,val imageDesc: String)
-    val pato1 = patos(R.drawable.pato1,"Pato observador","Te observa y te juzga")
-    val pato2 = patos(R.drawable.pato1,"Pato bélico","La paz nunca fue una opción")
-    val pato3 = patos(R.drawable.pato1,"Pato durmiendo","'ta cansao Zzz")
-    val pato4 = patos(R.drawable.pato1,"Pato enojao","¿Quién lo despertó? 😡")
+    data class patos(val imageID: Int, val imageTitle: String,val imageDesc: String)
+    val pato1 = patos(R.drawable.pato1," Pato observador"," Te observa y te juzga")
+    val pato2 = patos(R.drawable.patoguerra," Pato bélico"," La paz nunca fue una opción")
+    val pato3 = patos(R.drawable.patozzz1," Pato durmiendo"," 'ta cansao Zzz")
+    val pato4 = patos(R.drawable.patoenojao1," Pato enojao"," ¿Quién lo despertó? 😡")
     val listaPatos = arrayOf(pato1,pato2,pato3,pato4)
+    var currentDuck by remember { mutableStateOf(listaPatos[0]) }
     var imageName by remember { mutableStateOf(1) }
-    imageName = listaPatos[0].imageID
-    var imageTitle by remember { mutableStateOf("Pato observador") }
-    var imageDesc by remember { mutableStateOf("Te observa y te juzga") }
+    imageName = currentDuck.imageID
+    var imageTitle by remember { mutableStateOf(currentDuck.imageTitle) }
+    imageTitle = currentDuck.imageTitle
+    var imageDesc by remember { mutableStateOf(currentDuck.imageDesc) }
+    imageDesc = currentDuck.imageDesc
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row {
             Card(
@@ -92,11 +96,11 @@ fun CuerpoGallery() {
             ),modifier = Modifier.width(300.dp)) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
-                    Text(text = "Pato observador", fontSize = 20.sp)
+                    Text(text = imageTitle, fontSize = 20.sp)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Row {
-                    Text(text = "Te observa y te juzga", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                    Text(text = imageDesc, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -105,17 +109,33 @@ fun CuerpoGallery() {
         Spacer(modifier = Modifier.height(20.dp))
         Row {
             Column(modifier = Modifier.width(150.dp)) {
+                val mContext = LocalContext.current
                 Button( colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.AzulBoton))
-                    ,onClick = { /*TODO*/ }, modifier = Modifier
+                    ,onClick = {
+                        when (currentDuck) {
+                            listaPatos[0] -> Toast.makeText(mContext, "No hay imagenes anteriores", Toast.LENGTH_SHORT).show()
+                            listaPatos[1] -> currentDuck = listaPatos[0]
+                            listaPatos[2] -> currentDuck = listaPatos[1]
+                            listaPatos[3] -> currentDuck = listaPatos[2]
+                        }
+                               }, modifier = Modifier
                     .width(130.dp)
                     .padding(5.dp)) {
                     Text(text = "Previous")
                 }
             }
             Column(modifier = Modifier.width(150.dp)){
+                val mContext = LocalContext.current
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.AzulBoton))
-                    ,onClick = { /*TODO*/ }
+                    ,onClick = {
+                        when (currentDuck) {
+                            listaPatos[listaPatos.size-1] -> Toast.makeText(mContext, "No hay más imágenes para mostrar", Toast.LENGTH_SHORT).show()
+                            listaPatos[0] -> currentDuck = listaPatos[1]
+                            listaPatos[1] -> currentDuck = listaPatos[2]
+                            listaPatos[2] -> currentDuck = listaPatos[3]
+                        }
+                    }
                     , modifier = Modifier
                         .width(130.dp)
                         .padding(5.dp)
