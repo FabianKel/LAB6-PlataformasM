@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">MiGaleria</string>
+    <string name="user">"FabianKel"</string>
+    <string name="password">android6</string>
+    <string name="title_activity_1">Activity1</string>
 </resources>
